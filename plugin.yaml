@@ -1,0 +1,59 @@
+# Name of the plugin as shown in devspace list plugins and used for
+# devspace update plugin and devspace remove plugin
+name: devspace-plugin-example
+# The semantic current version of the plugin
+version: 0.0.1
+# Additional commands that are added to devspace
+commands:
+    # This will add the command devspace login
+  - name: "login"
+    # these args are prepended to the plugin binary, so when a user will call 'devspace login test test2 --flag 123'
+    # devspace will call the plugin binary with 'plugin-binary login test test2 --flag 123'
+    baseArgs: ["login"]
+    usage: "short description of command"
+    description: "long description of command"
+    # You can also add commands under already existing devspace subcommands
+    # This will add the devspace command: devspace list env
+  - name: "env"
+    baseArgs: ["list", "env"]
+    subCommand: "list"
+# Hooks are called before certain already existing commands are executed 
+# in devspace, for example devspace dev
+hooks:
+  # will be executed when devspace print is run by the user
+  - event: print
+    # this will call the plugin binary before devspace print is called with: 'plugin-binary list env'
+    baseArgs: ["list", "env"]
+  # root is executed before any other event and command execution except for other plugin commands
+  - event: root
+    baseArgs: ["login"]
+# You can also add predefined variables for the config via plugins
+vars:
+  # the name of the predefined variable 
+  # that can be used within any devspace.yaml
+  - name: EXAMPLE_USER
+    # this will call the plugin binary when resolving this variable and expects the variable
+    # output on stdout.
+    baseArgs: ["print", "env", "USER"]
+  - name: EXAMPLE_HOME
+    baseArgs: [ "print", "env", "HOME" ]
+# In this section the plugin binaries (or scripts) and their locations are defined
+# if devspace cannot find a binary for the current runtime.GOOS and runtime.GOARCH
+# it will not install the plugin
+binaries:
+  - os: darwin
+    arch: amd64
+    # can be either an URL or local path
+    path: main
+  - os: linux
+    arch: amd64
+    path: main
+  - os: linux
+    arch: "386"
+    path: main
+  - os: windows
+    arch: amd64
+    path: main.exe
+  - os: windows
+    arch: "386"
+    path: main.exe

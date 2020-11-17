@@ -1,0 +1,11 @@
+version: v1beta9
+images:
+  default:
+    image: myusername/devspace
+deployments:
+  - name: quickstart
+    helm:
+      componentChart: true
+      values:
+        containers:
+          - image: myusername/devspace

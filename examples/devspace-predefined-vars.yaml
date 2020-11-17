@@ -1,0 +1,4 @@
+version: v1beta9
+commands:
+  - name: hello
+    command: echo 'Hello ${EXAMPLE_USER}! Your home directory is in ${EXAMPLE_HOME}'
